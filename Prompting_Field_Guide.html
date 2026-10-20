@@ -1,0 +1,1237 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Prompting Field Guide</title><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+
+<style>
+/* ── TOKENS (dark-first cosmos) ── */
+:root {
+  --bg:#070B1A; --surface:#0D1326; --card:#111828; --card-h:#151F34;
+  --border:#1C2845; --border-a:#2A3D6E;
+  --text:#DFE6FF; --text-m:#8A99C4; --text-d:#48577E;
+  --gold:#FFD166; --lime:#A3E635; --teal:#06D6A0; --coral:#EF476F;
+  --violet:#9B8FFF; --sky:#4CC9F0; --amber:#FB8500; --pink:#F72585;
+  --c-foundation:var(--gold); --c-reasoning:var(--violet);
+  --c-agent:var(--teal); --c-structured:var(--sky);
+  --c-advanced:var(--coral); --c-framework:var(--amber); --c-skills:var(--pink); --c-blocks:var(--lime);
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#EEF1FF; --surface:#fff; --card:#fff; --card-h:#F5F7FF;
+  --border:#D8DDEF; --border-a:#9DABD6;
+  --text:#090E22; --text-m:#3A4870; --text-d:#7B88B2;
+  --gold:#B07900; --lime:#4D7C0F; --teal:#027A5B; --coral:#B42B4A;
+  --violet:#5D52C4; --sky:#2896BE; --amber:#C26100; --pink:#B3107A;
+}}
+:root[data-theme="light"]{
+  --bg:#EEF1FF; --surface:#fff; --card:#fff; --card-h:#F5F7FF;
+  --border:#D8DDEF; --border-a:#9DABD6;
+  --text:#090E22; --text-m:#3A4870; --text-d:#7B88B2;
+  --gold:#B07900; --lime:#4D7C0F; --teal:#027A5B; --coral:#B42B4A;
+  --violet:#5D52C4; --sky:#2896BE; --amber:#C26100; --pink:#B3107A;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:400px;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;padding:80px 24px 56px}
+#starfield{position:absolute;inset:0;width:100%;height:100%}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:680px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:22px}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5}
+h1{font-family:'Syne',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:clamp(34px,6vw,62px);font-weight:800;
+  line-height:1.04;letter-spacing:-.025em;text-wrap:balance;color:var(--text);margin-bottom:14px}
+h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:15.5px;color:var(--text-m);max-width:500px;margin:0 auto 30px;line-height:1.75}
+.search-row{display:flex;align-items:center;gap:10px;max-width:420px;margin:0 auto}
+.search-wrap{flex:1;position:relative}
+.search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  color:var(--text-d);pointer-events:none;flex-shrink:0}
+.search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px 11px 40px;color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s}
+.search-input::placeholder{color:var(--text-d)}
+.search-input:focus{border-color:var(--border-a)}
+.theme-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-m);transition:border-color .15s,color .15s;flex-shrink:0}
+.theme-btn:hover{border-color:var(--border-a);color:var(--text)}
+.theme-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ── CAT NAV ── */
+.cat-nav{position:sticky;top:0;z-index:100;background:var(--bg);
+  border-bottom:1px solid var(--border);padding:0 20px;
+  display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.cat-nav::-webkit-scrollbar{display:none}
+.cat-pill{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:14px 14px;
+  background:none;border:none;cursor:pointer;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;
+  font-weight:500;color:var(--text-d);border-bottom:2px solid transparent;
+  margin-bottom:-1px;transition:color .15s,border-color .15s;white-space:nowrap}
+.cat-pill:hover{color:var(--text-m)}
+.cat-pill.active{color:var(--cc);border-bottom-color:var(--cc)}
+.cat-pill .n{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:10px;
+  background:var(--border);color:var(--text-d);border-radius:100px;padding:1px 6px;
+  transition:background .15s,color .15s}
+.cat-pill.active .n{background:color-mix(in srgb,var(--cc) 15%,transparent);color:var(--cc)}
+
+/* ── GRID ── */
+.grid-wrap{max-width:1360px;margin:0 auto;padding:28px 20px 80px}
+.results-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;gap:12px}
+.results-count{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:12px;color:var(--text-d);
+  letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.empty{grid-column:1/-1;text-align:center;padding:72px 24px;color:var(--text-d)}
+.empty-icon{font-size:36px;margin-bottom:10px}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:13px;
+  overflow:hidden;cursor:pointer;
+  transition:transform .15s,border-color .15s,box-shadow .15s;
+  animation:fadeUp .28s ease both}
+.card:hover{transform:translateY(-2px);border-color:var(--border-a);
+  box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.card.open{border-color:var(--cc,var(--border-a))}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card-head{padding:18px 18px 14px;border-bottom:1px solid var(--border)}
+.card-meta{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.cat-badge{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;
+  background:color-mix(in srgb,var(--cc) 13%,transparent);color:var(--cc)}
+.diff{display:flex;gap:3px;margin-left:auto}
+.diff span{width:6px;height:6px;border-radius:50%;background:var(--border-a)}
+.diff span.on{background:var(--text-d)}
+.card-name{font-family:'Syne',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:17.5px;font-weight:700;
+  color:var(--text);margin-bottom:3px;line-height:1.2}
+.card-tag{font-size:12.5px;color:var(--text-m);font-style:italic}
+.dg .bu{fill:var(--cc);fill-opacity:.13}.dg .bm{fill:var(--text);fill-opacity:.045}.dg .bx{fill:var(--text);fill-opacity:.09}
+.dg text.ll{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:7.5px;font-weight:600;letter-spacing:.14em;fill:var(--text-m);text-anchor:start}
+.dg .pi{fill:var(--cc)}
+.dg rect.bub{stroke-width:1.6}
+.dg polygon.tail{fill:var(--cc)}
+.dg rect.xt{stroke:var(--text-m);fill:var(--card)}
+.dg-wrap{margin:0 0 12px;padding:10px 10px 8px;background:var(--surface);border:1px solid var(--border);border-radius:9px}
+.dg-wrap .io-lbl{margin-bottom:6px}
+.dg{width:100%;height:auto;display:block}
+.dg text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:10.5px;font-weight:600;fill:var(--text);text-anchor:middle;dominant-baseline:central}
+.dg text.lb{font-size:9.5px;font-weight:500;fill:var(--text-m)}
+.dg rect.n{fill:var(--surface);stroke:var(--cc);stroke-width:1.3}
+.dg rect.end{fill:var(--cc);fill-opacity:.2;stroke:var(--cc);stroke-width:1.8}
+.dg rect.cut{stroke-dasharray:3 3;stroke:var(--text-d);opacity:.8}
+.dg .ln{stroke:var(--text-m);stroke-width:1.3;fill:none}
+.dg .lp{stroke:var(--cc);stroke-width:1.5;fill:none;stroke-dasharray:4 3}
+.dg polygon{fill:var(--text-m)}
+.dg .hp{fill:var(--cc)}
+.card-body{padding:14px 18px}
+.area-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.area-tag{font-size:10.5px;color:var(--text-d);background:var(--surface);
+  border:1px solid var(--border);border-radius:5px;padding:2px 7px;
+  font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace}
+.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.io-box{background:var(--surface);border-radius:7px;padding:9px 11px}
+.io-lbl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-d);margin-bottom:3px}
+.io-txt{font-size:11.5px;color:var(--text-m);line-height:1.5}
+.card-foot{display:flex;align-items:center;gap:6px;padding:11px 18px;
+  font-size:11.5px;color:var(--text-d);font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;
+  letter-spacing:.04em;border-top:1px solid var(--border);transition:color .15s}
+.card:hover .card-foot,.card.open .card-foot{color:var(--cc,var(--text-m))}
+.foot-arr{margin-left:auto;font-size:12px;transition:transform .2s}
+.card.open .foot-arr{transform:rotate(180deg)}
+
+/* ── EXPANDED ── */
+.card-exp{display:none;border-top:1px solid var(--border);background:var(--surface)}
+.card.open .card-exp{display:block}
+.exp-sec{padding:14px 18px;border-bottom:1px solid var(--border)}
+.exp-sec:last-child{border-bottom:none}
+.exp-lbl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-d);margin-bottom:7px}
+.exp-txt{font-size:12.5px;color:var(--text-m);line-height:1.68}
+.wa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wa-box{border-radius:7px;padding:9px 11px}
+.wa-when{background:color-mix(in srgb,var(--teal) 8%,transparent);
+  border:1px solid color-mix(in srgb,var(--teal) 18%,transparent)}
+.wa-avoid{background:color-mix(in srgb,var(--coral) 8%,transparent);
+  border:1px solid color-mix(in srgb,var(--coral) 18%,transparent)}
+.wa-lbl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:4px}
+.wa-when .wa-lbl{color:var(--teal)} .wa-avoid .wa-lbl{color:var(--coral)}
+.wa-txt{font-size:11px;color:var(--text-m);line-height:1.55}
+pre.code{background:var(--bg);border:1px solid var(--border);border-radius:7px;
+  padding:12px 14px;font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:11.5px;
+  line-height:1.65;color:var(--text-m);overflow-x:auto;white-space:pre}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ex-in .exp-lbl{color:var(--gold)} .ex-out .exp-lbl{color:var(--teal)}
+@media(max-width:580px){.io-grid,.wa-grid,.ex-grid{grid-template-columns:1fr}}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:22px;text-align:center;
+  font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace;font-size:11px;color:var(--text-d);letter-spacing:.05em}
+
+@media(prefers-reduced-motion:reduce){.card{animation:none}*{transition-duration:.01ms!important}}
+@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:32px}}
+</style>
+
+<!-- HERO -->
+<header class="hero">
+  <canvas id="starfield"></canvas>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>35 Techniques · 8 Categories · Practical Field Guide<span class="eyebrow-dot"></span></div>
+    <h1>Prompting<br><em>Field Guide</em></h1>
+    <p class="hero-sub">From zero-shot to multi-agent orchestration — with templates, worked examples and notes on when not to use each. Compiled for practical use; corrections welcome.</p>
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="search" type="search" placeholder="Search techniques…" autocomplete="off">
+      </div>
+      <button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+        <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- CATEGORY NAV -->
+<nav class="cat-nav" id="catNav" role="navigation" aria-label="Filter by category"></nav>
+
+<!-- GRID -->
+<main>
+  <div class="grid-wrap">
+    <div class="results-bar">
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<footer>
+<div style="max-width:900px;margin:0 auto;text-align:left;line-height:1.7">
+<p><strong>Prompting Field Guide</strong> · 35 techniques · 8 categories · Reviewed October 2026. Results vary by model, so test before relying on any technique.</p>
+<p style="margin-top:10px"><strong>Credits.</strong> This guide builds on the work of many researchers and practitioners. Chain-of-Thought (Wei et al.), Zero-Shot CoT (Kojima et al.), Self-Consistency (Wang et al.), Tree of Thoughts (Yao et al.), Skeleton-of-Thought (Ning et al.), Least-to-Most (Zhou et al.), ReAct (Yao et al.), Reflexion (Shinn et al.), PAL (Gao et al.), Generated Knowledge (Liu et al.), Self-Ask (Press et al.), Directional Stimulus (Li et al.), Automatic Prompt Engineer (Zhou et al.), Constitutional AI (Bai et al., Anthropic), RAG (Lewis et al.), EmotionPrompt (Li et al.). CO-STAR is credited to Sheila Teo (GovTech Singapore). CRISPE and RISEN are community frameworks; originators are not confirmed here. Also see the open Prompt Engineering Guide by DAIR.AI.</p>
+<p style="margin-top:10px">Original papers and authorship details should be checked at source. Spotted an error or a missing credit? Please tell me and I will correct it.</p>
+</div></footer>
+
+<script>
+/* ── DATA ── */
+const CATS = [
+  {id:'all',label:'All'},
+  {id:'foundation',label:'Foundation',cc:'var(--c-foundation)'},
+  {id:'reasoning',label:'Reasoning',cc:'var(--c-reasoning)'},
+  {id:'agent',label:'Agent & Tools',cc:'var(--c-agent)'},
+  {id:'structured',label:'Structured Output',cc:'var(--c-structured)'},
+  {id:'advanced',label:'Advanced',cc:'var(--c-advanced)'},
+  {id:'framework',label:'Frameworks',cc:'var(--c-framework)'},
+  {id:'skills',label:'Skills & Memory',cc:'var(--c-skills)'},
+  {id:'blocks',label:'Building Blocks',cc:'var(--c-blocks)'},
+];
+
+const T=[
+  // ── FOUNDATION ──────────────────────────────────────────
+  {id:'zero-shot',cat:'foundation',name:'Zero-Shot',diff:1,
+   tag:'Direct instruction — no demonstrations',
+   area:['Text Classification','Summarization','Q&A','Translation','Simple Tasks'],
+   input:'Task description only — no example pairs',
+   output:'Completion drawn from pre-training knowledge',
+   detail:'Provide a clear task description with no exemplar pairs. Works remarkably well for tasks the model encountered during training. Always the right first attempt before adding complexity. Fails on novel domains, complex multi-step tasks, and custom schemas.',
+   when:'Task is well-established in training data; need a fast baseline',
+   avoid:'Novel reasoning chains, niche formats, high-stakes accuracy',
+   template:`You are a {expert_role}.
+
+{clear_task_description}
+
+{constraints_if_any}
+
+Respond with {format_specification}.`,
+   exP:`You are a professional copywriter.\n\nWrite a one-sentence tagline for a noise-cancelling headphone brand targeting remote workers.\n\nRespond with only the tagline, in quotes.`,
+   exO:`"Silence the world. Amplify your work."`},
+
+  {id:'few-shot',cat:'foundation',name:'Few-Shot (ICL)',diff:1,
+   tag:'Teach by showing, not telling',
+   area:['Classification','Data Extraction','Custom Formatting','Style Matching','Labelling'],
+   input:'2–8 labeled input→output pairs, then the real input',
+   output:'Model interpolates the demonstrated pattern onto new input',
+   detail:'Exemplar quality beats quantity. Use balanced examples across classes. The order of examples can subtly bias outputs — shuffle if the task has multiple labels. Few-shot implicitly encodes format, tone, length, and domain vocabulary without explicit instruction.',
+   when:'Zero-shot underperforms; output format needs precision; style needs calibration',
+   avoid:'Very long examples that waste context; more than 8 shots rarely help',
+   template:`Input: {example_1_input}
+Output: {example_1_output}
+
+Input: {example_2_input}
+Output: {example_2_output}
+
+Input: {example_3_input}
+Output: {example_3_output}
+
+Input: {actual_input}
+Output:`,
+   exP:`Input: "I love this product, works perfectly!"\nOutput: Positive\n\nInput: "Terrible quality, broke after one day."\nOutput: Negative\n\nInput: "Arrived on time. Does what it says."\nOutput:`,
+   exO:`Neutral`},
+
+  {id:'role-persona',cat:'foundation',name:'Role / Persona',diff:1,
+   tag:'Give the model a mask that fits the task',
+   area:['Expert Q&A','Domain Advice','Writing Style','Simulation','Character Dialogue'],
+   input:'Role declaration + task description',
+   output:'Response filtered through that persona\'s knowledge, tone, and heuristics',
+   detail:'Priming with a specific expert role activates relevant knowledge patterns and appropriate response style. Combine with explicit task constraints to prevent generic responses. The role should match the task domain — "senior data scientist" for a statistics problem often helps compared with a generic assistant, though results vary by model and task.',
+   when:'Need domain-specific vocabulary, tone, or reasoning heuristics',
+   avoid:'Roles implying safety bypass; vague roles like "helpful AI"',
+   template:`You are a {specific_expert_role} with {X} years of experience in {domain}.
+
+You approach problems by {characteristic_thinking_style}.
+
+{task_or_question}`,
+   exP:`You are a senior UX researcher with 12 years of experience in SaaS product design.\n\nYou approach problems by first understanding user mental models before recommending interface changes.\n\nReview this onboarding flow and identify the top 3 friction points a first-time user would encounter.`,
+   exO:`1. Account creation asks for company size before explaining the product's value — users don't know why it matters.\n2. "Import your data" appears before any tutorial, creating anxiety about irreversible actions.\n3. No progress indicator — users can't gauge how long onboarding takes.`},
+
+  {id:'system-prompts',cat:'foundation',name:'System Prompts',diff:1,
+   tag:'Set the model\'s operating context before conversation begins',
+   area:['Production Chatbots','APIs','Assistants','Guardrails','Persistent Personas'],
+   input:'Structured instructions delivered before any user turn',
+   output:'All subsequent responses conform to declared context, role, and constraints',
+   detail:'System prompts establish identity, behavior, knowledge scope, tone, and format rules. Best practice: Role → Capabilities → Constraints → Output format → Edge-case handling. They persist across the full context window and are the primary control surface for production AI systems.',
+   when:'Building production systems; need consistent behavior across all turns',
+   avoid:'Conflicting instructions between system and user turns; over-specifying everything',
+   template:`# Role
+You are {name}, a {description}.
+
+# Capabilities
+You can {list_capabilities}.
+You cannot {list_limitations}.
+
+# Behavior
+- Always {rule_1}
+- Never {rule_2}
+- When {edge_case}: {handling}
+
+# Output Format
+{format_specification}`,
+   exP:`# Role\nYou are Aria, a technical support specialist for CloudBase.\n\n# Capabilities\nYou can answer questions about features, pricing, and troubleshooting.\nYou cannot access live account data or make billing changes.\n\n# Behavior\n- Always ask for the specific error message before diagnosing\n- Never speculate about competitor products\n- When asked about billing, direct to support@cloudbase.io\n\n# Output Format\nUnder 150 words. Numbered steps for procedures.`,
+   exO:`[Model behavior conforms to all rules on every subsequent turn]`},
+
+  {id:'negative-prompt',cat:'foundation',name:'Negative Prompting',diff:1,
+   tag:'Define the boundary by ruling out what you don\'t want',
+   area:['Content Control','Format Enforcement','Style Control','Scope Limiting'],
+   input:'Positive task instruction + explicit "do not" constraints',
+   output:'Output that avoids the excluded behaviors',
+   detail:'Negative constraints work best paired with positive alternatives. "Do not use bullet points — write in flowing prose" outperforms "do not use bullet points" alone. Avoid contradictory negatives. Particularly useful for format enforcement, topic bounding, and preventing common model tendencies.',
+   when:'Model keeps drifting toward an unwanted behavior or format',
+   avoid:'Over-constraining with negatives — can confuse the model or cause perverse effects',
+   template:`{task_instruction}
+
+Do not {unwanted_behavior_1}.
+Do not {unwanted_behavior_2}.
+Instead, {positive_alternative}.`,
+   exP:`Explain how neural networks learn.\n\nDo not use analogies to the human brain.\nDo not use bullet points.\nInstead, write in flowing prose for a mathematically literate reader new to ML.`,
+   exO:`A neural network learns by iteratively adjusting numerical weights through a process called backpropagation…`},
+
+  // ── REASONING ────────────────────────────────────────────
+  {id:'cot',cat:'reasoning',name:'Chain-of-Thought (CoT)',diff:2,
+   tag:'Thinking aloud dramatically improves accuracy',
+   area:['Mathematics','Logic Puzzles','Science','Multi-step Reasoning','Code Debugging'],
+   input:'Task + instruction to reason step by step, or few-shot exemplars showing reasoning',
+   output:'Visible reasoning chain followed by a final answer',
+   detail:'Eliciting intermediate reasoning steps dramatically improves performance on complex tasks. The output scratchpad corrects errors mid-reasoning that would propagate in a direct-answer prompt. In few-shot CoT, exemplars show reasoning process; in zero-shot CoT, trigger phrases activate it. A landmark finding in LLM capability.',
+   when:'Task requires intermediate reasoning; errors appear in final-answer-only prompts',
+   avoid:'Simple factual lookups — CoT adds tokens without benefit on trivial tasks',
+   template:`{task_or_problem}
+
+Think through this step by step before giving your final answer.`,
+   exP:`A store sells apples for $0.50 each and oranges for $0.75 each. Maria buys 6 apples and 4 oranges and hands over a $10 bill. How much change does she receive?\n\nThink through this step by step.`,
+   exO:`Step 1: Apples = 6 × $0.50 = $3.00\nStep 2: Oranges = 4 × $0.75 = $3.00\nStep 3: Total = $3.00 + $3.00 = $6.00\nStep 4: Change = $10.00 − $6.00 = $4.00\n\nFinal Answer: $4.00`},
+
+  {id:'zero-shot-cot',cat:'reasoning',name:'Zero-Shot CoT',diff:1,
+   tag:'"Let\'s think step by step" — the magic phrase',
+   area:['Mathematics','Logic','Estimation','Planning','Debugging'],
+   input:'Problem + trigger phrase to activate reasoning',
+   output:'Spontaneous reasoning chain, then answer',
+   detail:'Appending "Let\'s think step by step" activates chain-of-thought reasoning without providing examples. A key finding showing emergent reasoning in LLMs. Effective triggers include: "Let\'s think step by step", "Walk me through your reasoning", "Think carefully before answering". No exemplars needed.',
+   when:'No exemplars available; need CoT without writing full reasoning demonstrations',
+   avoid:'When you need reliable formatting — less structured than few-shot CoT',
+   template:`{problem_or_question}
+
+Let's think step by step.`,
+   exP:`If a train travels 120 km in 1.5 hours, then slows to half that speed for another 2 hours, what is the total distance?\n\nLet's think step by step.`,
+   exO:`Initial speed = 120 ÷ 1.5 = 80 km/h\nSlowed speed = 80 ÷ 2 = 40 km/h\nDistance at slow speed = 40 × 2 = 80 km\nTotal = 120 + 80 = 200 km`},
+
+  {id:'self-consistency',cat:'reasoning',name:'Self-Consistency',diff:2,
+   tag:'Sample many reasoning paths; vote on the answer',
+   area:['Mathematics','Logic','Medical Reasoning','High-stakes Q&A','Code'],
+   input:'Same CoT prompt sampled multiple times at temperature > 0',
+   output:'Most common final answer across all sampled paths (majority vote)',
+   detail:'Generate multiple diverse reasoning chains (temperature 0.7–1.0). The final answer is determined by majority vote. Correct reasoning paths converge on the right answer while incorrect paths diverge — so the modal answer is more likely correct. Dramatically outperforms single-pass CoT on arithmetic and commonsense benchmarks.',
+   when:'Single CoT pass produces inconsistent answers; accuracy must be maximised',
+   avoid:'Low-latency requirements — multiple samples are expensive and slow',
+   template:`[Run this prompt 5–10 times at temperature ~0.7]
+
+{problem}
+
+Let's think step by step.
+
+[After sampling, take the majority vote of final answers]`,
+   exP:`[Run 7× at T=0.7]\nWhat is 15% of 240? Think step by step.\n\n[Results: 36, 36, 36, 34, 36, 36, 36]`,
+   exO:`Final Answer: 36 (6/7 samples agree)`},
+
+  {id:'tot',cat:'reasoning',name:'Tree of Thoughts (ToT)',diff:3,
+   tag:'Explore and prune a tree of intermediate steps',
+   area:['Planning','Puzzle Solving','Strategic Decisions','Creative Brainstorming'],
+   input:'Problem + structured prompts to generate, evaluate, and select branches',
+   output:'Best solution path found by exploring and pruning the reasoning tree',
+   detail:'ToT enables deliberate lookahead and backtracking. Steps: (1) Generate k candidate next steps; (2) Evaluate each as sure/maybe/impossible; (3) Search via BFS or DFS. Requires multiple model calls per step. Best for structured problems with clear success criteria and where dead ends are common.',
+   when:'Problem requires backtracking; no single obvious reasoning path',
+   avoid:'Simple tasks — ToT has high compute overhead; rarely worth it for linear problems',
+   template:`[Step 1 — Generate candidates]
+Given {problem}, generate 3 possible next steps.
+
+[Step 2 — Evaluate each]
+Rate each: Sure / Maybe / Impossible. Give brief reasoning.
+
+[Step 3 — Select and continue]
+Expand the best-rated candidate.
+
+[Repeat until solution found]`,
+   exP:`Problem: Plan a weekend trip for 4 people with a $600 total budget.\n\nGenerate 3 destination types, estimate cost feasibility for each, expand the viable option.`,
+   exO:`A: Local national park camping → Sure ($150–200) ✓\nB: Nearby city hotel → Maybe ($400–700) ±\nC: International flight → Impossible ($1200+) ✗\n\nExpanding A: [Detailed camping plan within budget]`},
+
+  {id:'skeleton',cat:'reasoning',name:'Skeleton-of-Thought',diff:2,
+   tag:'Outline first, then flesh out in parallel',
+   area:['Long-form Content','Reports','Structured Docs','Curricula','Plans'],
+   input:'Task + skeleton generation prompt + parallel expansion prompts',
+   output:'Complete structured document built from parallel sub-completions',
+   detail:'Two-phase approach: (1) Generate a skeleton/outline with section names and 1-sentence descriptions; (2) Expand each section independently and in parallel. Reduces latency for long documents. Sections must be logically independent for this to work well — interdependent sections should use prompt chaining instead.',
+   when:'Need to generate long structured outputs faster; parallel generation is possible',
+   avoid:'Tasks where sub-sections are interdependent (each section affects the next)',
+   template:`Phase 1 — Skeleton:
+Create a structured outline for {task}.
+Format: [Section Name]: [One-sentence description of content].
+
+Phase 2 — Expand (each run independently):
+Expand section "{section_name}" ({description}) as part of a {doc_type} about {topic}. ~{word_count} words.`,
+   exP:`Phase 1: Outline a guide on "Remote Team Communication Best Practices" with 5 sections.\n\nPhase 2 (parallel): Expand "Asynchronous Communication" (~200 words).`,
+   exO:`[5 parallel expansions combined into complete guide]`},
+
+  {id:'least-to-most',cat:'reasoning',name:'Least-to-Most / Decomposition',diff:2,
+   tag:'Solve easy sub-problems first, build to harder ones',
+   area:['Mathematics','Coding','Planning','Education','Complex Q&A'],
+   input:'Task + instruction to decompose into sub-problems and solve progressively',
+   output:'Series of sub-answers that scaffold toward the final answer',
+   detail:'Decomposes a complex problem into easier sub-problems solved sequentially, with each answer provided as context for the next. Outperforms standard CoT on compositional generalisation tasks. The key insight: if the model can solve each sub-problem, the chain of sub-solutions provides enough context to solve the whole.',
+   when:'Final problem depends on intermediate results; direct solving produces errors',
+   avoid:'Problems with no natural decomposition hierarchy',
+   template:`To solve "{complex_problem}", identify sub-problems from simplest to hardest.
+
+Sub-problem 1: {simplest_component}
+Answer: [solve it]
+
+Sub-problem 2: {next} (building on sub-problem 1)
+Answer: [solve it]
+
+Final Problem: {original} (using all previous answers)
+Answer:`,
+   exP:`Sub-problem 1: Subtotal (3 × $24.99) = $74.97\nSub-problem 2: Apply 15% discount: $74.97 × 0.85 = $63.72\nSub-problem 3: Add 8% tax: $63.72 × 1.08 = $68.82\n\nFinal: Total with $5 tip?`,
+   exO:`$68.82 + $5.00 = $73.82`},
+
+  // ── AGENT & TOOLS ──────────────────────────────────────
+  {id:'react',cat:'agent',name:'ReAct',diff:3,
+   tag:'Interleave reasoning and real-world actions',
+   area:['Web Search Agents','Code Execution','Research Agents','Tool-using Assistants'],
+   input:'Task + tool definitions + Thought → Action → Observation loop',
+   output:'Interleaved trace of thoughts, actions (tool calls), and observations',
+   detail:'ReAct synergizes reasoning and acting. The model alternates between Thought (reasoning about next step), Action (calling a tool), and Observation (the result). Forces the model to ground reasoning in real observations rather than hallucinating results. Named after "Reasoning + Acting".',
+   when:'Task requires gathering external information or taking actions on real systems',
+   avoid:'Static tasks with all info in context — ReAct overhead isn\'t justified',
+   template:`You have access to:
+{tool_name}: {description}
+
+Use this format:
+Thought: [reason about next step]
+Action: tool_name("{params}")
+Observation: [tool result]
+... (repeat)
+Thought: I now have enough information.
+Final Answer: [answer]
+
+Task: {task}`,
+   exP:`Task: Who is the current CEO of OpenAI?\n\nThought: I need to look this up — my training data may be outdated.\nAction: search("OpenAI CEO 2025")\nObservation: Sam Altman is CEO of OpenAI.\nThought: I have the answer.\nFinal Answer: Sam Altman.`,
+   exO:`Final Answer: Sam Altman is the CEO of OpenAI.`},
+
+  {id:'reflexion',cat:'agent',name:'Reflexion',diff:3,
+   tag:'Fail → reflect → retry with memory of mistakes',
+   area:['Code Generation','Sequential Tasks','Decision Making','Complex Reasoning'],
+   input:'Task + evaluation signal + iterative reflection loop',
+   output:'Improved solution after each reflection cycle',
+   detail:'After each attempt, the model evaluates its output, reflects on what went wrong, and stores this reflection as episodic memory for the next attempt. Like a developer reviewing failed tests and fixing code. Requires: (1) an evaluation function to signal success/failure, (2) a reflective prompt, (3) a memory buffer for reflections.',
+   when:'First attempts often fail; model needs to learn from its own errors within a session',
+   avoid:'Tasks with no verifiable feedback signal; single-turn requirements',
+   template:`Attempt {n}:
+{model_response}
+
+Evaluation: {success/failure + specific errors}
+
+Reflection: What went wrong and what will I do differently?
+{model_reflection}
+
+Attempt {n+1} (incorporating reflection):
+{improved_response}`,
+   exP:`Attempt 1: [Python function with off-by-one error]\nTest: FAILED — IndexError on line 7\n\nReflection: I used range(len(arr)) but needed range(len(arr)-1) for adjacent pairs.\n\nAttempt 2: [Corrected function]\nTest: PASSED`,
+   exO:`def find_adjacent_pairs(arr):\n    return [(arr[i], arr[i+1]) for i in range(len(arr)-1)]`},
+
+  {id:'tool-calling',cat:'agent',name:'Tool / Function Calling',diff:2,
+   tag:'Bind the model to typed, executable tool schemas',
+   area:['API Integration','Code Execution','Database Queries','External Services'],
+   input:'Tool schema definitions (name, description, parameters) + user task',
+   output:'Structured function call with filled parameters, ready for execution',
+   detail:'LLMs given tool schemas (JSON Schema) output structured function calls rather than free-form text. The runtime parses the call, executes the tool, and feeds the result back. Critical: write precise, unambiguous tool descriptions — the model treats the description as its contract. Use native structured output modes when available.',
+   when:'Model needs to take real-world actions with structured, validated inputs',
+   avoid:'When tool schemas are ambiguous — models will mismatch or hallucinate parameters',
+   template:`Tools available:
+{
+  "name": "{tool_name}",
+  "description": "{precise_unambiguous_description}",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "{param}": {"type": "{type}", "description": "{what_it_does}"}
+    },
+    "required": ["{param}"]
+  }
+}
+
+User: {user_request}`,
+   exP:`Tool: get_weather(city: string, unit: "celsius"|"fahrenheit")\nDescription: Fetch current weather conditions for a given city.\n\nUser: What's the weather in Tokyo right now?`,
+   exO:`{"tool": "get_weather", "parameters": {"city": "Tokyo", "unit": "celsius"}}`},
+
+  {id:'multi-agent',cat:'agent',name:'Multi-Agent Orchestration',diff:3,
+   tag:'Divide and specialise — agents as composable units',
+   area:['Complex Pipelines','Autonomous Research','Long-horizon Tasks','Parallel Workloads'],
+   input:'Orchestrator prompt + sub-agent system prompts + communication protocol',
+   output:'Coordinated multi-step result from specialised agents working in concert',
+   detail:'Multi-agent systems assign specialised roles to each agent: an orchestrator decomposes goals and delegates; sub-agents execute narrower tasks. Key design decisions: communication protocol, shared memory/state, error handling when a sub-agent fails, human-in-the-loop checkpoints. Popular patterns: Orchestrator→Workers, Parallel Specialists, Critic+Generator.',
+   when:'Task is too complex or long for a single context; specialisation improves quality',
+   avoid:'Simple tasks — orchestration overhead and error propagation can outweigh benefits',
+   template:`# Orchestrator
+You decompose the goal and delegate to specialists.
+Available agents: {agent_list}
+Format: DELEGATE TO {agent}: {specific_task}
+
+# Specialist (per agent)
+You are the {specialty} specialist.
+Complete assigned tasks and return structured output.`,
+   exP:`Goal: "Write and fact-check a 500-word article on fusion energy."\n→ DELEGATE TO Research Agent: "Find 5 recent fusion milestones"\n→ DELEGATE TO Writer Agent: "Write 500 words using [facts]"\n→ DELEGATE TO Critic Agent: "Fact-check this draft: [draft]"`,
+   exO:`[Orchestrator assembles final verified article from all agent outputs]`},
+
+  {id:'agent-system',cat:'agent',name:'Agent System Prompting',diff:2,
+   tag:'Design the complete operating context for an autonomous agent',
+   area:['Production Agents','AI Products','Persistent Assistants','Chatbots'],
+   input:'Structured role, capabilities, tools, constraints, and communication rules',
+   output:'Consistent, scoped agent behavior across all interactions',
+   detail:'A well-structured agent system prompt includes: (1) Identity and role; (2) Capabilities — what tools/knowledge is available; (3) Hard constraints — what it must never do; (4) Uncertainty handling; (5) Communication style; (6) Output format rules. Treat it like a job description — specific, actionable, covering edge cases.',
+   when:'Building a persistent agent that operates over many turns or tasks',
+   avoid:'Contradictory capabilities/constraints; over-long prompts that bloat every API call',
+   template:`# Identity
+Name: {name} | Role: {role} | Domain: {domain}
+
+# Tools Available
+{tool}: {description}
+
+# Constraints
+- Always {mandatory_behavior}
+- Never {prohibited_behavior}
+- When uncertain: {uncertainty_handling}
+
+# Communication
+Tone: {tone} | Format: {format} | Length: {guideline}`,
+   exP:`# Identity\nName: ResearchBot | Role: Academic research assistant | Domain: Scientific literature\n\n# Tools: search_arxiv, get_paper_details, cite_apa\n\n# Constraints\n- Always cite sources with DOI\n- Never fabricate citations\n- When uncertain: state confidence level explicitly`,
+   exO:`[Agent behaves consistently across all research tasks within these bounds]`},
+
+  // ── STRUCTURED OUTPUT ─────────────────────────────────
+  {id:'structured-out',cat:'structured',name:'Structured Output',diff:2,
+   tag:'Force the model into a machine-readable schema',
+   area:['API Pipelines','Data Extraction','Classification','Database Population'],
+   input:'Task + explicit schema definition (JSON/XML) with field descriptions',
+   output:'Response that conforms exactly to the declared schema',
+   detail:'Instruct the model to output ONLY valid JSON/XML matching a provided schema. Provide the schema with field-level descriptions. Use native structured output modes (OpenAI response_format, Anthropic tool use) when available — these enforce schemas at the sampling level and eliminate parse failures.',
+   when:'Output must be parsed programmatically; downstream systems need reliable format',
+   avoid:'Deeply nested schemas with >5 levels — models lose track of nesting depth',
+   template:`Extract information from the text and return ONLY valid JSON matching this schema:
+
+{
+  "field_1": "string — description",
+  "field_2": "number — description",
+  "field_3": ["array of strings"]
+}
+
+Text: {input_text}
+
+Return only the JSON object. No explanation.`,
+   exP:`Schema: {"role":"string","company":"string","salary":{"min":number,"max":number},"skills":["string"]}\n\nText: "Senior ML Engineer at DataFlow Inc. $150k–$200k. Required: Python, PyTorch, MLOps."`,
+   exO:`{"role":"Senior ML Engineer","company":"DataFlow Inc.","salary":{"min":150000,"max":200000},"skills":["Python","PyTorch","MLOps"]}`},
+
+  {id:'pal',cat:'structured',name:'PAL (Program-Aided LM)',diff:2,
+   tag:'Offload computation to a code interpreter',
+   area:['Mathematics','Data Analysis','Finance Calculations','Logic','Symbol Manipulation'],
+   input:'Problem statement + instruction to write executable code as the reasoning step',
+   output:'Working code that when executed produces the correct answer',
+   detail:'Instead of computing in natural language (where arithmetic errors are common), the model writes code to solve the problem. The code is then executed by an interpreter. This delegates computation to a reliable runtime, using the model only for reasoning about how to structure the solution. Dramatically improves quantitative accuracy.',
+   when:'Task involves precise computation that language models are unreliable at',
+   avoid:'Tasks that don\'t decompose into executable code; environments without code execution',
+   template:`Solve the following by writing Python code that computes the answer.
+Show the code, then the output.
+
+Problem: {quantitative_problem}`,
+   exP:`Solve by writing Python:\nA portfolio: 30% bonds at 4%, 50% equities at 12%, 20% cash at 1.5%.\nWhat is the weighted average return?`,
+   exO:`\`\`\`python\nbonds = 0.30 * 0.04      # 0.012\nequities = 0.50 * 0.12  # 0.060\ncash = 0.20 * 0.015     # 0.003\nprint(f"{(bonds+equities+cash):.1%}")  # 7.5%\n\`\`\`\nOutput: 7.5%`},
+
+  {id:'chaining',cat:'structured',name:'Prompt Chaining',diff:2,
+   tag:'One prompt\'s output becomes the next prompt\'s input',
+   area:['Document Processing','Content Pipelines','Multi-stage Analysis','Code Review'],
+   input:'Sequence of prompts where each step receives output from the previous',
+   output:'Final result refined through all intermediate pipeline stages',
+   detail:'Break complex tasks into discrete pipeline stages, each with a single clear responsibility. Benefits: (1) Clearer errors — you can see exactly where the chain breaks; (2) Better quality — each stage optimised independently; (3) Human review checkpoints between stages. Limit to 5–7 steps; error propagation compounds with chain length.',
+   when:'Task is too complex for a single prompt; natural stage boundaries exist',
+   avoid:'Chains longer than 5–7 steps; highly interdependent stages that can\'t be isolated',
+   template:`Stage 1 — Extract:
+  Input: {raw_input} → Output: {structured_data}
+
+Stage 2 — Transform:
+  Input: {Stage 1 output} → Output: {transformed_result}
+
+Stage 3 — Generate:
+  Input: {Stage 2 output} → Output: {final_output}`,
+   exP:`Stage 1: Extract all numbers and units from this scientific abstract.\nStage 2: Convert all units to SI.\nStage 3: Summarise the quantitative findings using SI values.`,
+   exO:`[Stage 1 extracts] → [Stage 2 converts] → [Stage 3 synthesises clean summary]`},
+
+  {id:'gen-knowledge',cat:'structured',name:'Generated Knowledge',diff:2,
+   tag:'Ask the model to recall relevant facts before answering',
+   area:['Factual Q&A','Commonsense Reasoning','Knowledge-intensive Tasks'],
+   input:'Two-step prompt: first generate relevant facts, then use them to answer',
+   output:'More accurate, knowledge-grounded answer built on the generated context',
+   detail:'Prompt the model to first generate potentially relevant facts about a topic, then use those facts as context to answer the actual question. Activates dormant parametric knowledge before applying it, reducing the chance the model contradicts itself or ignores relevant information. Works best when knowledge is stable.',
+   when:'Model underperforms on knowledge-dependent tasks; want to prime relevant context',
+   avoid:'Tasks requiring up-to-date info — the "knowledge" may be outdated or hallucinated',
+   template:`Step 1: What are {N} important facts about {topic} relevant to:
+"{question}"?
+
+Step 2: Given these facts, answer:
+"{question}"`,
+   exP:`Step 1: List 5 facts about photosynthesis relevant to:\n"Why do plants turn yellow without enough light?"\n\nStep 2: Using those facts, explain the yellowing.`,
+   exO:`Facts: [chlorophyll, light absorption, carotenoids, chloroplast function…]\n\nAnswer: Without light, chlorophyll cannot be produced or maintained. As it degrades, the underlying yellow/orange carotenoid pigments become visible.`},
+
+  // ── ADVANCED ──────────────────────────────────────────
+  {id:'meta-prompt',cat:'advanced',name:'Meta-Prompting / APE',diff:3,
+   tag:'Let the model write and optimise its own prompts',
+   area:['Prompt Optimisation','Automated Workflows','Prompt Libraries','Research'],
+   input:'Task description + instruction to generate, evaluate, and improve the prompt itself',
+   output:'An optimised prompt for the target task',
+   detail:'Automatic Prompt Engineer (APE) treats prompt generation as an optimisation problem. Instruct the model to (1) generate candidate prompts, (2) evaluate each on sample inputs, (3) refine the best candidate. Generated prompts often outperform human-written ones. Powerful for scaling prompt creation across many tasks.',
+   when:'Need high-quality prompts at scale; manual iteration is too slow',
+   avoid:'Critical applications without human review of AI-generated prompts',
+   template:`You are a prompt engineering expert.
+
+Task: {task_description}
+Target model: {model}
+Sample inputs: {2-3 examples}
+
+Generate 3 candidate prompts for this task.
+For each, predict how well it handles the samples.
+Select the best and explain why.
+Output the final optimised prompt.`,
+   exP:`Generate an optimised prompt for classifying support tickets into: Billing, Technical, Account, Other.\n\nSamples: "I can't log in", "My invoice is wrong", "How do I export data?"\n\nCreate 3 candidates, evaluate, output the best.`,
+   exO:`Best prompt: "Classify this support ticket into exactly one category: Billing, Technical, Account, or Other. Output only the category name.\n\nTicket: {ticket_text}"`},
+
+  {id:'constitutional',cat:'advanced',name:'Constitutional AI / Self-Critique',diff:3,
+   tag:'Build a critic into the generation loop',
+   area:['Content Safety','Quality Assurance','Factual Accuracy','Bias Reduction','Code Review'],
+   input:'Initial response + critique prompt with specific principles to evaluate against',
+   output:'Revised response that addresses identified shortcomings',
+   detail:'Constitutional AI (Anthropic) trains models with a set of principles. At inference, self-critique replicates this: (1) Generate initial response; (2) Critique it against specific principles; (3) Revise based on critique. The principles function as the "constitution". Particularly effective for safety, tone, and factual accuracy without human review of every output.',
+   when:'First-pass outputs often have systematic quality or safety issues',
+   avoid:'Time-critical applications — two-pass generation doubles latency',
+   template:`Step 1 — Draft:
+{initial_response}
+
+Step 2 — Critique:
+Review the above against these principles:
+- {principle_1}
+- {principle_2}
+- {principle_3}
+Identify specific violations.
+
+Step 3 — Revise:
+Rewrite to address all identified issues.`,
+   exP:`Draft: [Explanation of a medical topic without safety caveats]\n\nCritique against: (1) Medical accuracy, (2) No harmful advice, (3) Recommend professional consultation\nIssue: Missing professional consultation recommendation.\n\nRevised: [Adds "consult a healthcare professional" appropriately]`,
+   exO:`[Revised response with all principles satisfied]`},
+
+  {id:'rag',cat:'advanced',name:'RAG Prompting',diff:2,
+   tag:'Ground answers in retrieved, current, verifiable knowledge',
+   area:['Knowledge Bases','Documentation Q&A','Customer Support','Research Assistants'],
+   input:'Retrieved document chunks + user query',
+   output:'Answer grounded in retrieved context, with source references',
+   detail:'Retrieval-Augmented Generation separates knowledge retrieval (a search system) from generation (the LLM). Critical prompt instructions: clearly delimit retrieved context from the user question, instruct the model to use ONLY the provided context, and cite sources. The most important instruction: "If the answer is not in the documents, say so — do not fabricate."',
+   when:'Model\'s parametric knowledge is outdated, insufficient, or unverifiable',
+   avoid:'Retrieving irrelevant chunks — garbage in, garbage out regardless of generation quality',
+   template:`Answer questions based ONLY on the provided documents.
+If the answer is not in the documents, say "I don't have enough information."
+Cite the source document for each claim.
+
+Documents:
+[DOC 1 — {source_1}]: {content_1}
+[DOC 2 — {source_2}]: {content_2}
+
+Question: {user_question}
+
+Answer (with citations):`,
+   exP:`[DOC 1 — Q3 Report]: "Revenue grew 23% YoY to $4.2B."\n[DOC 2 — CEO Letter]: "We expect Q4 margins to expand by 150 bps."\n\nQuestion: What was Q3 revenue growth?`,
+   exO:`Q3 revenue grew 23% year-over-year to $4.2 billion. [DOC 1 — Q3 Report]`},
+
+  {id:'multimodal',cat:'advanced',name:'Multimodal Prompting',diff:2,
+   tag:'Combine images, audio, or video with text instructions',
+   area:['Image Analysis','Document OCR','Chart Extraction','UI Review','Medical Imaging'],
+   input:'Image/audio/video + text instruction describing what to do with it',
+   output:'Text response that interprets, describes, or acts on the multimodal input',
+   detail:'Vision-language models accept images interleaved with text. Key principles: (1) Be specific about what aspect of the image to focus on; (2) Provide scale/context the model can\'t infer from pixels alone; (3) Ask for structured output when extracting data; (4) Specify confidence handling for uncertain regions. Effective for chart data extraction, UI review, and document analysis.',
+   when:'The relevant information is in a non-text modality',
+   avoid:'Assuming the model can reliably read very small text in images — verify accuracy',
+   template:`[Image: {image_description}]
+
+Analyse this {image_type}. Specifically:
+1. {focus_area_1}
+2. {focus_area_2}
+3. {focus_area_3}
+
+Format: {output_format}`,
+   exP:`[Image: Analytics dashboard screenshot]\n\nAnalyse this dashboard:\n1. Top 3 metrics and their values\n2. Any metrics showing negative trends\n3. The date range displayed\n\nFormat as JSON.`,
+   exO:`{"metrics":[{"name":"DAU","value":"142K"},…],"warnings":["Churn up 2.3%"],"date_range":"Oct 1–31, 2024"}`},
+
+  // ── FRAMEWORKS ────────────────────────────────────────
+  {id:'co-star',cat:'framework',name:'CO-STAR Framework',diff:1,
+   tag:'Context · Objective · Style · Tone · Audience · Response',
+   area:['Content Creation','Marketing Copy','Professional Writing','Structured Generation'],
+   input:'Six structured fields covering all communication dimensions',
+   output:'Response precisely calibrated to all six specified dimensions',
+   detail:'CO-STAR is a systematic framework for writing complete prompts: Context (background situation), Objective (what you want), Style (writing style), Tone (emotional register), Audience (who will read this), Response (format and length). Created to help non-engineers write production-quality prompts without trial-and-error.',
+   when:'Need to ensure all key communication dimensions are explicitly specified',
+   avoid:'Quick factual queries where the framework adds unnecessary verbosity',
+   template:`Context: {background_situation_and_facts}
+Objective: {specific_task_and_desired_output}
+Style: {writing_style}
+Tone: {emotional_register}
+Audience: {who_will_read_this_and_their_knowledge_level}
+Response: {format_and_length_specification}`,
+   exP:`Context: B2B SaaS company launching AI anomaly detection for finance teams.\nObjective: Write an announcement email introducing the new feature.\nStyle: Professional but approachable; avoid jargon.\nTone: Excited but credible; not hypey.\nAudience: CFOs with limited technical knowledge.\nResponse: Email format with subject line, under 200 words.`,
+   exO:`Subject: Introducing Smart Anomaly Detection — Catch Outliers Before They Become Problems\n\n[Well-calibrated email matching all six dimensions]`},
+
+  {id:'crispe',cat:'framework',name:'CRISPE Framework',diff:2,
+   tag:'Capacity · Role · Insight · Statement · Personality · Experiment',
+   area:['Expert Consultation','Deep Analysis','Technical Writing','Complex Advice','Research'],
+   input:'Six fields defining capacity, role, context, task, personality, and iteration',
+   output:'Expert-level response from the specified capacity and role, with variations',
+   detail:'CRISPE specifies: Capacity (what the model CAN do), Role (what it IS playing), Insight (what it KNOWS about context), Statement (what it must DO), Personality (how it should SOUND), Experiment (how to ITERATE with variations). More thorough than CO-STAR for expert domain prompting where depth matters more than brevity.',
+   when:'Need deep expert-level engagement with a nuanced, high-stakes problem',
+   avoid:'Simple tasks where the framework overhead isn\'t justified',
+   template:`Capacity: Act as {what_the_model_can_do}
+Role: You are a {specific_expert_role}
+Insight: {background_context_and_relevant_facts}
+Statement: {specific_task_with_clear_deliverable}
+Personality: {tone_style_communication_approach}
+Experiment: Provide {N} variations for comparison`,
+   exP:`Capacity: Act as a Silicon Valley startup advisor with 20 exits\nRole: Go-to-market strategist\nInsight: Developer tool for Kubernetes cost optimisation, 50 enterprise customers, $2M ARR\nStatement: Design outbound sales motion targeting Platform Engineering leads\nPersonality: Direct, data-driven, no fluff\nExperiment: Give 2 GTM approaches with pros/cons`,
+   exO:`Approach 1: Community-led growth via developer evangelism…\nApproach 2: Account-based targeting of 200 high-intent companies…`},
+
+  {id:'risen',cat:'framework',name:'RISEN Framework',diff:2,
+   tag:'Role · Instructions · Steps · End Goal · Narrowing',
+   area:['Process Documentation','SOPs','Task Automation','Technical Instructions'],
+   input:'Five structured fields: role, instructions, explicit steps, goal, and constraints',
+   output:'Precisely scoped, step-by-step execution of the defined procedure',
+   detail:'RISEN is optimised for procedural tasks. The Steps field is unique — it forces upfront specification of the procedure, leaving the model to execute rather than invent. Narrowing prevents scope creep. Best for tasks where the process is known and must be followed reliably. Underused relative to CO-STAR despite being more specific.',
+   when:'Task involves a known procedure that must be executed reliably every time',
+   avoid:'Creative tasks where rigid step-by-step structure constrains quality output',
+   template:`Role: You are a {specific_role}
+Instructions: {overall_task_description}
+Steps:
+1. {first_step}
+2. {second_step}
+3. {third_step}
+End Goal: {what_successful_output_looks_like}
+Narrowing: {constraints_and_scope_limitations}`,
+   exP:`Role: You are a code reviewer\nInstructions: Review the provided Python function\nSteps: 1. Check for bugs 2. Assess readability 3. Identify security issues 4. Suggest optimisations\nEnd Goal: Structured review report the developer can act on immediately\nNarrowing: Focus only on the provided function, not the broader codebase`,
+   exO:`## Code Review\n**Bugs:** [specific issues]\n**Readability:** [assessment]\n**Security:** [findings]\n**Optimisations:** [suggestions]`},
+
+  {id:'self-ask',cat:'reasoning',name:'Self-Ask / Directional Stimulus',diff:2,
+   tag:'The model interviews itself before answering',
+   area:['Research','Complex Analysis','Multi-faceted Q&A','Decision Support'],
+   input:'Complex question + instruction to decompose into sub-questions first',
+   output:'Systematic answer built from individually answered sub-questions',
+   detail:'Self-Ask prompts the model to identify what intermediate questions must be answered before the main question can be addressed — building its own reasoning scaffold. Directional Stimulus is related: it adds a hint or keyword to nudge the model toward a desired answer type. Both reduce missing-information errors on complex, multi-part queries.',
+   when:'Questions have multiple sub-components the model might miss if answered directly',
+   avoid:'Simple questions with direct answers; the overhead isn\'t warranted',
+   template:`Question: {complex_question}
+
+Before answering, identify what sub-questions must be answered first.
+
+Are there follow-up questions? Yes.
+Intermediate question: {sub_question_1}
+Answer: {answer_1}
+
+Intermediate question: {sub_question_2}
+Answer: {answer_2}
+
+Final answer: {synthesised_answer}`,
+   exP:`Question: Should we launch our product in Germany or France first?\n\nIntermediate: What are the market sizes?\nAnswer: Germany 84M, France 68M\n\nIntermediate: What are the regulatory differences?\nAnswer: Germany has stricter data protection enforcement…\n\nFinal answer:`,
+   exO:`Based on market size, regulatory environment, and our localisation capacity, France is the better first-launch market because…`},
+
+  // ── SKILLS & MEMORY ─────────────────────────────────
+  {id:'memory-ctx',cat:'skills',name:'Memory & Context Management',diff:3,
+   tag:'Give the model selective, structured access to relevant past context',
+   area:['Long Conversations','Persistent Agents','User-adaptive Systems','Multi-session Tasks'],
+   input:'Selective memory summary + current task (not raw conversation history)',
+   output:'Context-aware response that incorporates relevant history',
+   detail:'Context window management is a core production prompt engineering skill. Strategies: (1) Summarise conversation history periodically; (2) Use structured key-value fact stores rather than verbatim logs; (3) Inject only memories relevant to the current query; (4) Separate episodic (events) from semantic (facts) memory. In agentic systems, external vector stores enable retrieval-augmented memory.',
+   when:'Context window is limited relative to task length; history affects answer quality',
+   avoid:'Injecting irrelevant memory — consumes tokens and can actively confuse the model',
+   template:`## Session Context
+Goal: {overall_session_goal}
+
+## Relevant Memory
+[FACT] {key_fact}
+[DECISION] {past_decision_and_rationale}
+[PREFERENCE] {user_preference}
+
+## Current Request
+{current_task_or_question}`,
+   exP:`## Relevant Memory\n[FACT] User building SaaS app in Next.js + Supabase\n[DECISION] Chose Row Level Security over server-side checks (prior session)\n[PREFERENCE] TypeScript strict mode; hates "any" types\n\n## Current Request\nHow should I structure the user auth flow?`,
+   exO:`Given your Supabase + RLS setup and strict TypeScript preference, here's an auth flow that avoids "any" types…`},
+
+  {id:'emotional',cat:'skills',name:'Emotional / Motivational Boosting',diff:1,
+   tag:'Emotional framing can sometimes help — test it on your model',
+   area:['High-stakes Generation','Accuracy-critical Tasks','Quality Uplift','Thoroughness'],
+   input:'Task + emotionally-framed instruction that raises perceived stakes',
+   output:'Higher-quality, more thorough response from heightened attention',
+   detail:'Some studies report that adding motivational framing — "This is very important", "Take a deep breath and think carefully", "I\'m counting on this being accurate" — improved results on certain benchmarks, but findings vary by model and task and newer models may show little effect. Treat it as an experiment to test, not a guarantee. Use sparingly.',
+   when:'Task quality matters and you want to activate the model\'s more careful modes',
+   avoid:'Overdoing it — excessive emotional language reads as manipulation and can backfire',
+   template:`{task_instruction}
+
+This is critical — take your time and think carefully before responding.
+I\'m relying on this being accurate and complete.`,
+   exP:`Review this contract clause for ambiguity that could create liability.\n\n[clause text]\n\nThis is critical — we sign next week and a missed issue would be costly. Be thorough.`,
+   exO:`[More careful, thorough review than a baseline prompt typically produces]`},
+
+  // ── BUILDING BLOCKS ─────────────────────────────────────
+  {id:'skill',cat:'blocks',name:'Skill',diff:2,
+   tag:'A reusable folder of instructions loaded only when needed',
+   area:['Repeatable Workflows','Document Generation','Team Standards','Domain Expertise'],
+   input:'A request that matches the skill\'s description',
+   output:'Task completed using the skill\'s steps, scripts and checks',
+   detail:'A skill is a folder containing a SKILL.md file: YAML frontmatter (a name and a one-line description) followed by instructions, with optional scripts, templates and reference files alongside. Only the name and description stay in context; the full instructions load when a request matches the description (progressive disclosure). The description is therefore the trigger — write it to say what the skill does and when to use it.',
+   when:'You repeat the same multi-step procedure or need a consistent house style',
+   avoid:'One-off tasks, or short rules that belong in the system prompt',
+   template:`---
+name: {skill-name}
+description: {One sentence: what it does and WHEN to use it}
+---
+
+# {Skill title}
+
+## Steps
+1. {step_one}
+2. {step_two}
+
+## Verification
+{how_to_check_the_result}
+
+## Reference
+See reference/{topic}.md for {details}.`,
+   exP:`Create a skill "weekly-report". Trigger: when I ask for a weekly status update. Steps: gather this week's completed tasks, group by project, list blockers, keep it under 200 words.`,
+   exO:`---\nname: weekly-report\ndescription: Write a weekly status update. Use when asked for a status update or weekly report.\n---\n\n## Steps\n1. Gather completed tasks\n2. Group by project\n3. List blockers\n4. Keep under 200 words`},
+
+  {id:'reference-files',cat:'blocks',name:'Reference Files',diff:1,
+   tag:'Detail kept out of the prompt until it is needed',
+   area:['Long Skill Docs','API & Schema Specs','Style Guides','Knowledge Bases'],
+   input:'A short pointer in the main instructions ("see reference/x.md")',
+   output:'The model opens the file only when the task calls for it',
+   detail:'Reference files hold bulky detail — API specs, schemas, style guides, examples — in separate files beside a skill or project instead of in the main prompt. The main instructions stay short and say when to open each file. This keeps the context window lean and the model focused, and lets you update detail in one place. Keep each file to one topic, name it clearly, and link it directly from the main instructions.',
+   when:'Detail is long, only sometimes relevant, or shared across skills',
+   avoid:'Critical rules that must apply every time — keep those in the main prompt',
+   template:`## When to read what
+- Writing API calls -> read reference/api.md
+- Formatting output -> read reference/style.md
+- Otherwise, do not open reference files.
+
+reference/
+  api.md
+  style.md
+  examples.md`,
+   exP:`For billing questions, read reference/billing-faq.md before answering. Do not open it for any other topic.\n\nUser: Why was I charged twice?`,
+   exO:`[Model opens reference/billing-faq.md, finds the duplicate-charge section, then answers from it]`},
+
+  {id:'agent',cat:'blocks',name:'Agent',diff:3,
+   tag:'A model that pursues a goal by looping over tools until done',
+   area:['Research Tasks','Coding Assistants','Workflow Automation','Customer Support'],
+   input:'A goal, the tools it may use, and guardrails',
+   output:'Completed task plus a record of the actions taken',
+   detail:'An agent is an LLM run in a loop: it plans, calls a tool, reads the result and decides the next step until the goal is met or it needs help. What separates it from a single prompt is its control over the sequence of steps. Give it a clear goal, a small well-described toolset, a stop condition, and rules for when to ask a human. Start with the simplest design that works; use an agent only when the path cannot be fixed in advance.',
+   when:'The steps cannot be predicted in advance and tools are needed',
+   avoid:'A fixed sequence you could run as a prompt chain — cheaper and more predictable',
+   template:`# Goal
+{what_success_looks_like}
+
+# Tools
+{tool_name}: {when_to_use}
+
+# Rules
+- Stop when {done_condition}
+- Ask the user before {risky_action}
+
+# Output
+{final_report_format}`,
+   exP:`Goal: find the three most-cited 2024 papers on retrieval-augmented generation and summarise each in two lines.\nTools: web_search, read_page.\nStop when you have three papers. Ask before downloading anything.`,
+   exO:`[search -> read -> compare citations -> repeat]\n\n1. Title — two-line summary\n2. Title — two-line summary\n3. Title — two-line summary`},
+
+  {id:'sub-agent',cat:'blocks',name:'Sub-Agent',diff:3,
+   tag:'A specialist the main agent delegates to, with its own clean context',
+   area:['Parallel Research','Code Review','Large Codebase Search','Context Isolation'],
+   input:'A focused task brief from the main agent',
+   output:'A short summary returned to the main agent — not the full working',
+   detail:'A sub-agent is an agent started by another agent to handle one bounded job. It has its own context window, its own instructions and often a restricted toolset; it does the work and hands back only a summary. That keeps the main conversation uncluttered, lets several jobs run in parallel and allows specialist prompts. Write each brief as if to a colleague with no context: the goal, the constraints, and exactly what to return. A sub-agent cannot see the main conversation unless you pass it.',
+   when:'A side task would flood the main context, or jobs can run in parallel',
+   avoid:'Small tasks where writing the brief costs more than doing the work',
+   template:`Name: {sub_agent_name}
+Purpose: {one_line_job}
+Tools: {allowed_tools_only}
+
+Brief:
+Goal: {specific_goal}
+Context: {facts_it_cannot_see}
+Return: {exact_format_and_length}`,
+   exP:`Name: code-reviewer\nPurpose: review one file for bugs\nTools: read-only\n\nGoal: review auth.py.\nContext: we use JWTs.\nReturn: up to 5 findings, each with line number and fix.`,
+   exO:`1. Line 42 — token expiry is not checked -> validate the exp claim\n2. Line 58 — secret read from source code -> load from environment`},
+
+  {id:'plugin',cat:'blocks',name:'Plugin',diff:2,
+   tag:'An installable bundle of skills, agents, commands and connectors',
+   area:['Team Standardisation','Role-based Toolkits','Sharing Workflows','Onboarding'],
+   input:'Installing the plugin into a workspace',
+   output:'Its skills, sub-agents, commands and connectors become available together',
+   detail:'A plugin packages related capabilities so they can be installed, versioned and shared as one unit. It can include skills, sub-agents, slash commands, hooks and connectors to external tools (MCP servers), described by a manifest. Teams use plugins to give everyone the same workflow — a legal-review or sales-prep toolkit, for example. Build and test the skills and agents first; wrap them in a plugin once they are stable and worth sharing.',
+   when:'Several skills, agents or connectors belong together and must be shared or kept consistent',
+   avoid:'A single personal skill — keep it a plain skill until others need it',
+   template:`my-plugin/
+  .claude-plugin/plugin.json
+  skills/{name}/SKILL.md
+  agents/{name}.md
+  commands/{name}.md
+  .mcp.json
+
+Describe: {who_it_is_for_and_what_it_does}`,
+   exP:`Package our contract-review workflow as a plugin: a skill with our checklist, a reviewer sub-agent, and a /review-contract command.`,
+   exO:`contract-review/\n  .claude-plugin/plugin.json\n  skills/clause-checklist/SKILL.md\n  agents/reviewer.md\n  commands/review-contract.md`},
+];
+
+/* ── RENDER ── */
+const grid=document.getElementById('grid');
+const catNav=document.getElementById('catNav');
+const search=document.getElementById('search');
+const resultsCount=document.getElementById('resultsCount');
+let activeCat='all', searchQ='';
+
+const catColors={
+  foundation:'var(--c-foundation)',reasoning:'var(--c-reasoning)',
+  agent:'var(--c-agent)',structured:'var(--c-structured)',
+  advanced:'var(--c-advanced)',framework:'var(--c-framework)',skills:'var(--c-skills)',blocks:'var(--c-blocks)'
+};
+
+const catLabels={
+  foundation:'Foundation',reasoning:'Reasoning',agent:'Agent & Tools',
+  structured:'Structured Output',advanced:'Advanced',framework:'Frameworks',skills:'Skills & Memory',blocks:'Building Blocks'
+};
+
+function diffDots(d){
+  let h='<div class="diff">';
+  for(let i=1;i<=3;i++) h+=`<span class="${i<=d?'on':''}"></span>`;
+  return h+'</div>';
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+
+/* ── USER-JOURNEY DIAGRAMS (inline SVG, no external resources) ──
+   Lanes: u = You, m = Model/Agent, x = tools / files / agents.
+   Every diagram starts with the user's ask and ends with what the user gets back. */
+const DG={
+ 'zero-shot':{s:[['u','Plain|request'],['m','Reads the|instruction'],['m','Answers from|training'],['u','You get|the answer']]},
+ 'few-shot':{s:[['u','Show 2–3|examples'],['u','Add your|new input'],['m','Spots the|pattern'],['u','Same-style|answer']]},
+ 'role-persona':{s:[['u','Pick a|role'],['m','Adopts|the persona'],['m','Applies its|expertise'],['u','Expert|answer']]},
+ 'system-prompts':{s:[['u','Developer|writes rules'],['m','Stored as|system prompt'],['u','User|chats'],['m','Replies|in role'],['u','Consistent|answer']]},
+ 'negative-prompt':{s:[['u','Task +|"don\'t…"'],['m','Drafts'],['m','Skips|banned items'],['u','Bounded|output']]},
+ 'cot':{s:[['u','Hard|question'],['m','Step 1'],['m','Step 2'],['u','Answer +|working']]},
+ 'zero-shot-cot':{s:[['u','Add magic|phrase'],['m','Reasons|aloud'],['m','Concludes'],['u','Accurate|answer']]},
+ 'self-consistency':{s:[['u','Ask once'],['m',['Path 1','Path 2','Path 3']],['m','Majority|vote'],['u','Reliable|answer']]},
+ 'tot':{s:[['u','Hard|problem'],['m',['Idea A','Idea B','!Idea C']],['m','Keep the|best branch'],['u','Best|plan']]},
+ 'skeleton':{s:[['u','Long-form|request'],['m','Outline|first'],['m',['Point 1','Point 2','Point 3']],['u','Full|draft']]},
+ 'least-to-most':{s:[['u','Complex|problem'],['m','Split into|sub-questions'],['m','Easy first,|then harder'],['u','Final|answer']]},
+ 'react':{xl:'TOOLS',s:[['u','Give a|goal'],['m','Thought'],['x','Action'],['m','Observe'],['u','Result']],loop:{f:3,t:1,l:'repeat until done'}},
+ 'reflexion':{xl:'TESTS',s:[['u','Task +|a test'],['m','Attempt'],['x','Test|fails'],['m','Reflect|& note'],['u','Passing|result']],loop:{f:3,t:1,l:'retry with notes'}},
+ 'tool-calling':{xl:'TOOLS',s:[['u','Ask a|question'],['m','Picks tool|+ inputs'],['x','Tool|runs'],['m','Writes the|answer'],['u','You get|the answer']]},
+ 'multi-agent':{xl:'AGENTS',s:[['u','Big goal'],['m','Orchestrator|splits work'],['x',['Agent A','Agent B','Agent C']],['m','Merges|results'],['u','Delivered|result']]},
+ 'agent-system':{xl:'TOOLS',s:[['u','Write role,|tools, rules'],['m','Agent boots|with it'],['u','Give it|a goal'],['x','Acts with|tools'],['u','Report']]},
+ 'structured-out':{xl:'APP / DB',s:[['u','Request +|JSON schema'],['m','Fills in|the schema'],['x','App checks|& stores'],['u','Clean|data']]},
+ 'pal':{xl:'RUNTIME',s:[['u','Maths|question'],['m','Writes|code'],['x','Python|runs it'],['u','Exact|answer']]},
+ 'chaining':{s:[['u','Big task'],['m','Prompt 1'],['m','Prompt 2'],['m','Prompt 3'],['u','Result']]},
+ 'gen-knowledge':{s:[['u','Question'],['m','Recalls|facts first'],['m','Answers|using them'],['u','Grounded|answer']]},
+ 'meta-prompt':{s:[['u','Describe|the goal'],['m','Writes a|prompt'],['m','Tests &|scores it'],['u','Best|prompt']],loop:{f:2,t:1,l:'refine and retry'}},
+ 'constitutional':{s:[['u','Request'],['m','Draft'],['m','Critique|vs rules'],['m','Revise'],['u','Safer|answer']],loop:{f:3,t:2,l:'until it passes'}},
+ 'rag':{xl:'YOUR DOCS',s:[['u','Question'],['x','Retrieve|passages'],['m','Answers|from them'],['u','Sourced|answer']]},
+ 'multimodal':{s:[['u','Photo'],['u','Question'],['m','Sees +|reads'],['u','Answer']]},
+ 'co-star':{s:[['u','Fill the|6 slots'],['m','Reads the|full brief'],['m','Writes in|that voice'],['u','On-brand|output']]},
+ 'crispe':{s:[['u','Fill the|6 slots'],['m','Reads the|full brief'],['m','Reasons as|the expert'],['u','Deep|analysis']]},
+ 'risen':{s:[['u','Fill the|5 slots'],['m','Reads the|full brief'],['m','Follows|the steps'],['u','Repeatable|result']]},
+ 'self-ask':{s:[['u','Question'],['m','Needs a|follow-up?'],['m','Answers|sub-question'],['u','Final|answer']],loop:{f:2,t:1,l:'more follow-ups?'}},
+ 'skill-prompt':{xl:'SKILL',s:[['u','Ask for|a task'],['m','Matches the|skill'],['x','Loads|steps'],['m','Follows|them'],['u','Consistent|result']]},
+ 'memory-ctx':{xl:'MEMORY',s:[['u','New|message'],['x','Select|memories'],['m','Prompt =|memory + ask'],['u','Tailored|answer']]},
+ 'emotional':{s:[['u','Add stakes'],['m','Pays more|attention'],['m','Checks its|work'],['u','Thorough|answer']]},
+ 'skill':{xl:'SKILL',s:[['u','Ask for|a task'],['m','Matches|description'],['x','Loads|SKILL.md'],['m','Follows|the steps'],['u','Consistent|result']]},
+ 'reference-files':{xl:'REFERENCE',s:[['u','Ask'],['m','Reads short|instructions'],['x','Opens one|file'],['m','Answers'],['u','Accurate|reply']]},
+ 'agent':{xl:'TOOLS',s:[['u','Give a|goal'],['m','Plan'],['x','Use a|tool'],['m','Check|result'],['u','Done +|report']],loop:{f:3,t:1,l:'repeat until goal met'}},
+ 'sub-agent':{xl:'SUB-AGENTS',s:[['u','Ask a big|question'],['m','Main agent|delegates'],['x',['Agent A','Agent B']],['m','Reads the|summaries'],['u','Clean|answer']]},
+ 'plugin':{xl:'BUNDLE',s:[['u','Install|the plugin'],['x',['Skills','Agents','Commands','Connectors']],['m','Gains all|of them'],['u','Use the|workflow']]}
+};
+const DG_LN={u:'YOU',m:'MODEL',x:'TOOLS'};
+function dgBox(x,y,w,h,label,cls,tail){
+  const ls=label.split('|'),mx=Math.max(...ls.map(q=>q.length)),fs=Math.max(8,Math.min(10.5,(w-6)/(0.58*mx))),lh=fs+2,y0=y+h/2-(ls.length-1)*lh/2;
+  return `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h}" rx="${cls.includes('xt')?3:7}"/>`+
+    (tail?`<polygon class="tail" points="${(x+7).toFixed(1)},${(y+h-0.5).toFixed(1)} ${(x+3).toFixed(1)},${(y+h+6).toFixed(1)} ${(x+14).toFixed(1)},${(y+h-0.5).toFixed(1)}"/>`:'')+
+    ls.map((q,i)=>`<text style="font-size:${fs.toFixed(1)}px" x="${(x+w/2).toFixed(1)}" y="${(y0+i*lh).toFixed(1)}">${esc(q)}</text>`).join('');
+}
+function dgSvg(t){
+  const d=DG[t.id];if(!d) return '';
+  const W=360,n=d.s.length,colw=W/n,gap=n>4?12:18,bw=colw-gap,bh=32,sh=24,pad=18;
+  const lanes=['u','m','x'].filter(l=>d.s.some(q=>q[0]===l));
+  const cnt={};lanes.forEach(l=>{cnt[l]=Math.max(...d.s.filter(q=>q[0]===l).map(q=>Array.isArray(q[1])?q[1].length:1))});
+  const lh={},ly={};let y=0;
+  lanes.forEach(l=>{const k=cnt[l],boxH=k>1?sh:bh;lh[l]=pad+k*(boxH+4)-4+8;ly[l]=y;y+=lh[l]+4;});
+  const H=y-4;let svg='',boxes=[];
+  lanes.forEach(l=>{
+    svg+=`<rect class="b${l}" x="0" y="${ly[l]}" width="${W}" height="${lh[l]}" rx="8"/>`;
+    const lab=l==='x'?(d.xl||DG_LN.x):(l==='m'?(d.ml||DG_LN.m):DG_LN.u);
+    if(l==='u') svg+=`<circle class="pi" cx="11" cy="${ly[l]+8}" r="2.6"/><path class="pi" d="M5.5 ${ly[l]+14.5} a5.5 5.5 0 0 1 11 0z"/>`;
+    svg+=`<text class="ll" x="${l==='u'?20:8}" y="${ly[l]+9}">${esc(lab)}</text>`;
+  });
+  d.s.forEach((q,i)=>{
+    const l=q[0],items=Array.isArray(q[1])?q[1]:[q[1]],k=items.length,boxH=k>1?sh:bh,total=k*(boxH+4)-4;
+    const area=lh[l]-pad-4,y0=ly[l]+pad+(area-total)/2,x=i*colw+gap/2,g=[];
+    items.forEach((lbl,m)=>{
+      const cut=lbl[0]==='!',txt=cut?'✗ '+lbl.slice(1):lbl,yy=y0+m*(boxH+4);
+      const last=i===n-1,first=i===0;
+      const cls=l==='u'?(last?'end':'n bub'):(l==='x'?'n xt':'n')+(cut?' cut':'');
+      svg+=dgBox(x,yy,bw,boxH,txt,cls,l==='u'&&!last);
+      g.push({x,y:yy,w:bw,h:boxH,cut});
+    });
+    boxes.push(g);
+  });
+  for(let i=0;i<n-1;i++){
+    boxes[i].forEach(a=>{ if(a.cut) return;
+      boxes[i+1].forEach(b=>{
+        const x1=a.x+a.w,y1=a.y+a.h/2,x2=b.x,y2=b.y+b.h/2,mx=x1+(x2-x1)/2-1;
+        svg+=`<path class="ln" d="M${x1.toFixed(1)} ${y1.toFixed(1)} H${mx.toFixed(1)} V${y2.toFixed(1)} H${(x2-5).toFixed(1)}"/><polygon points="${x2.toFixed(1)},${y2.toFixed(1)} ${(x2-6).toFixed(1)},${(y2-3.2).toFixed(1)} ${(x2-6).toFixed(1)},${(y2+3.2).toFixed(1)}"/>`;
+      });
+    });
+  }
+  let HH=H;
+  if(d.loop){
+    const a=boxes[d.loop.f][0],b=boxes[d.loop.t][0],xf=a.x+a.w/2,xt=b.x+b.w/2,yb=H+10;
+    svg+=`<path class="lp" d="M${xf.toFixed(1)} ${(a.y+a.h).toFixed(1)} V${yb} H${xt.toFixed(1)} V${(b.y+b.h+6).toFixed(1)}"/>`+
+      `<polygon class="hp" points="${xt.toFixed(1)},${(b.y+b.h+1).toFixed(1)} ${(xt-3.5).toFixed(1)},${(b.y+b.h+8).toFixed(1)} ${(xt+3.5).toFixed(1)},${(b.y+b.h+8).toFixed(1)}"/>`+
+      `<text class="lb" x="${((xf+xt)/2).toFixed(1)}" y="${yb+10}">${esc(d.loop.l)}</text>`;
+    HH=yb+18;
+  }
+  const alt='Journey from the user\'s side: '+d.s.map(q=>(Array.isArray(q[1])?q[1].join(' and '):q[1]).replace(/\|/g,' ').replace(/^!/,'')).join(' → ');
+  return `<div class="dg-wrap"><div class="io-lbl">Journey · you → result</div><svg class="dg" viewBox="-2 -2 ${W+4} ${HH+4}" role="img" aria-label="${esc(alt)}">${svg}</svg></div>`;
+}
+function renderCard(t){
+  const cc=catColors[t.cat]||'var(--gold)';
+  const areaHtml=t.area.map(a=>`<span class="area-tag">${esc(a)}</span>`).join('');
+  return `<article class="card" data-id="${t.id}" style="--cc:${cc}" tabindex="0" role="button" aria-expanded="false">
+  <div class="card-head">
+    <div class="card-meta">
+      <span class="cat-badge">${catLabels[t.cat]}</span>
+      ${diffDots(t.diff)}
+    </div>
+    <div class="card-name">${esc(t.name)}</div>
+    <div class="card-tag">${esc(t.tag)}</div>
+  </div>
+  <div class="card-body">
+    <div class="area-tags">${areaHtml}</div>
+    ${dgSvg(t)}
+    <div class="io-grid">
+      <div class="io-box"><div class="io-lbl">Input</div><div class="io-txt">${esc(t.input)}</div></div>
+      <div class="io-box"><div class="io-lbl">Output</div><div class="io-txt">${esc(t.output)}</div></div>
+    </div>
+  </div>
+  <div class="card-foot">
+    <span>View detail &amp; template</span>
+    <span class="foot-arr">▾</span>
+  </div>
+  <div class="card-exp">
+    <div class="exp-sec">
+      <div class="exp-lbl">Technique Detail</div>
+      <div class="exp-txt">${esc(t.detail)}</div>
+    </div>
+    <div class="exp-sec">
+      <div class="wa-grid">
+        <div class="wa-box wa-when"><div class="wa-lbl">✓ Use when</div><div class="wa-txt">${esc(t.when)}</div></div>
+        <div class="wa-box wa-avoid"><div class="wa-lbl">✗ Avoid when</div><div class="wa-txt">${esc(t.avoid)}</div></div>
+      </div>
+    </div>
+    <div class="exp-sec">
+      <div class="exp-lbl">Prompt Template</div>
+      <pre class="code">${esc(t.template)}</pre>
+    </div>
+    <div class="exp-sec">
+      <div class="ex-grid">
+        <div class="ex-in">
+          <div class="exp-lbl ex-in">Example Prompt</div>
+          <pre class="code">${esc(t.exP)}</pre>
+        </div>
+        <div class="ex-out">
+          <div class="exp-lbl ex-out">Example Output</div>
+          <pre class="code">${esc(t.exO)}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>`;
+}
+
+function filterAndRender(){
+  const q=searchQ.toLowerCase().trim();
+  const visible=T.filter(t=>{
+    const catOk=activeCat==='all'||t.cat===activeCat;
+    if(!q) return catOk;
+    const haystack=(t.name+t.tag+t.area.join(' ')+t.detail+t.cat).toLowerCase();
+    return catOk&&haystack.includes(q);
+  });
+
+  grid.innerHTML=visible.length
+    ? visible.map((t,i)=>renderCard(t).replace('<article','<article style="animation-delay:'+(i*0.03)+'s;--cc:'+catColors[t.cat]+'"')).join('')
+    : `<div class="empty"><div class="empty-icon">⊘</div><p>No techniques match "${esc(searchQ)}"</p></div>`;
+
+  resultsCount.textContent=`${visible.length} technique${visible.length!==1?'s':''} shown`;
+
+  // attach click handlers
+  grid.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click',()=>toggleCard(card));
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(card);}});
+  });
+}
+
+function toggleCard(card){
+  const open=card.classList.contains('open');
+  card.classList.toggle('open',!open);
+  card.setAttribute('aria-expanded',String(!open));
+}
+
+/* ── CATEGORY NAV ── */
+function buildNav(){
+  const counts={all:T.length};
+  T.forEach(t=>{ counts[t.cat]=(counts[t.cat]||0)+1; });
+
+  catNav.innerHTML=CATS.map(c=>{
+    const cc=c.cc||'var(--gold)';
+    const active=c.id===activeCat;
+    return `<button class="cat-pill${active?' active':''}" data-cat="${c.id}" style="--cc:${cc}">
+      ${c.label} <span class="n">${counts[c.id]||0}</span>
+    </button>`;
+  }).join('');
+
+  catNav.querySelectorAll('.cat-pill').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeCat=btn.dataset.cat;
+      catNav.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      filterAndRender();
+    });
+  });
+}
+
+search.addEventListener('input',()=>{searchQ=search.value;filterAndRender();});
+
+/* ── THEME ── */
+const themeBtn=document.getElementById('themeBtn');
+const themeIcon=document.getElementById('themeIcon');
+const SUN='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+const MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+let isDark=window.matchMedia('(prefers-color-scheme:dark)').matches||!window.matchMedia('(prefers-color-scheme:light)').matches;
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  themeIcon.innerHTML=isDark?MOON:SUN;
+}
+themeBtn.addEventListener('click',()=>{isDark=!isDark;applyTheme();});
+applyTheme();
+
+/* ── CANVAS STARFIELD ── */
+(function(){
+  const c=document.getElementById('starfield');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[];
+
+  function resize(){
+    W=c.offsetWidth; H=c.offsetHeight;
+    c.width=W; c.height=H;
+    stars=Array.from({length:Math.floor(W*H/3000)},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.15, vy:(Math.random()-.5)*.15,
+      r:Math.random()*1.4+.3,
+      a:Math.random()*.7+.2
+    }));
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const dark=document.documentElement.getAttribute('data-theme')==='light'?false:true;
+    const starColor=dark?[255,209,102]:[176,121,0];
+    const lineColor=dark?[155,143,255]:[93,82,196];
+
+    // draw connections
+    for(let i=0;i<stars.length;i++){
+      for(let j=i+1;j<stars.length;j++){
+        const dx=stars[i].x-stars[j].x, dy=stars[i].y-stars[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<90){
+          const alpha=(1-dist/90)*.15*(dark?1:.5);
+          ctx.beginPath();
+          ctx.strokeStyle=`rgba(${lineColor},${alpha})`;
+          ctx.lineWidth=.6;
+          ctx.moveTo(stars[i].x,stars[i].y);
+          ctx.lineTo(stars[j].x,stars[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // draw stars
+    stars.forEach(s=>{
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${starColor},${s.a*(dark?1:.6)})`;
+      ctx.fill();
+
+      s.x+=s.vx; s.y+=s.vy;
+      if(s.x<0)s.x=W; if(s.x>W)s.x=0;
+      if(s.y<0)s.y=H; if(s.y>H)s.y=0;
+    });
+
+    if(!document.hidden) requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',()=>{resize();});
+  resize();
+  draw();
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) draw(); });
+})();
+
+buildNav();
+filterAndRender();
+</script>
+
+</body></html>
